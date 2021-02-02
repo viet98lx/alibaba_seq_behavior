@@ -37,10 +37,12 @@ if __name__ == '__main__':
     test_data_path = data_dir + 'test_lines.txt'
     test_instances = MC_utils.read_instances_lines_from_file(test_data_path)
     nb_test = len(test_instances)
+
     if w_behavior_file is None:
-        w_behavior = {'buy': 1, 'cart': 0.5, 'fav': 0.5, 'pv':0.5}
+        w_behavior = {'buy': 1, 'cart': 0.5, 'fav': 0.5, 'pv': 0.5}
     else:
-        w_behavior = json.load(w_behavior_file)
+        with open(w_behavior_file, 'r') as fp:
+            w_behavior = json.load(fp)
     # print(nb_test)
     print("---------------------@Build knowledge-------------------------------")
     MAX_SEQ_LENGTH, item_dict, reversed_item_dict, item_probs, item_freq_dict, user_dict = MC_utils.build_knowledge(train_instances+test_instances,w_behavior)

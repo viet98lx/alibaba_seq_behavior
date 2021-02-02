@@ -81,7 +81,8 @@ if __name__ == '__main__':
     if w_behavior_file is None:
         w_behavior = {'buy': 1, 'cart': 0.5, 'fav': 0.5, 'pv':0.5}
     else:
-        w_behavior = json.load(w_behavior_file)
+        with open(w_behavior_file, 'r') as fp:
+            w_behavior = json.load(fp)
 
     ### build knowledge ###
     # common_instances = train_instances + test_instances
