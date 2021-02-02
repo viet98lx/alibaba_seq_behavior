@@ -20,7 +20,7 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
         cur_item_list = [p.split(':')[0] for p in re.split('[\\s]+', cur_basket.strip())]
         for ib_pair in prev_item_list:
             for item in cur_item_list:
-                t = tuple(item_dict[ib_pair[0]], item_dict[item])
+                t = (item_dict[ib_pair[0]], item_dict[item])
                 if t not in pair_dict:
                     pair_dict[t] = w_behavior[ib_pair[1]]
                 else:
