@@ -60,7 +60,7 @@ if __name__ == '__main__':
         ex_instances = test_instances
     for i in random.sample(ex_instances, nb_predict):
         elements = i.split('|')
-        b_seq = elements[1:]
+        b_seq = elements[-mc_model.mc_order-1:-1]
         # prev_basket = [item for item in re.split('[\\s]+',b_seq[-2].strip())]
         prev_item = []
         for prev_basket in b_seq[:-1]:
