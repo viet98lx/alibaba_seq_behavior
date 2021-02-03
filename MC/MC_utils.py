@@ -7,13 +7,13 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
   pair_dict = dict()
   NB_ITEMS = len(item_dict)
   print("number items: ", NB_ITEMS)
-  j = 0
+  # j = 0
   for line in train_instances[:10]:
-      print(j)
-      j += 1
+      # print(j)
+      # j += 1
       elements = line.split("|")
       user = elements[0]
-      print('User')
+      # print('User')
       basket_seq = elements[1:]
       for i in range(mc_order,len(basket_seq)):
         prev_baskets = basket_seq[i-mc_order:i]
@@ -38,8 +38,8 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
         #             pair_dict[t] += w_behavior[ib_pair[1]]
         for t in list(itertools.product(prev_ib_idx, cur_item_idx)):
             item_pair = (t[0][0], t[1])
-            print(item_pair)
-            print(t[0][1])
+            # print(item_pair)
+            # print(t[0][1])
             if item_pair in pair_dict.keys():
                 pair_dict[item_pair] += w_behavior[t[0][1]]
             else:
