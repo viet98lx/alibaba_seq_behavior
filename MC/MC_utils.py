@@ -8,7 +8,7 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
   NB_ITEMS = len(item_dict)
   print("number items: ", NB_ITEMS)
   # j = 0
-  for line in train_instances[:10]:
+  for line in train_instances:
       # print(j)
       # j += 1
       elements = line.split("|")
