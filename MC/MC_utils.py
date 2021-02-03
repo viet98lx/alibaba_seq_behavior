@@ -68,8 +68,11 @@ def build_knowledge(training_instances, w_behavior):
 
         for basket in basket_seq:
             ib_pair = [tuple(p.split(':')) for p in re.split('[\\s]+', basket.strip())]
+            print(ib_pair)
             for item_obs in ib_pair:
                 if item_obs[0] not in item_freq_dict:
+                    print(item_obs[0])
+                    print(item_obs[1])
                     item_freq_dict[item_obs[0]] = w_behavior[item_obs[1]]
                 else:
                     item_freq_dict[item_obs[0]] += w_behavior[item_obs[1]]
