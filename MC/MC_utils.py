@@ -6,7 +6,8 @@ import numpy as np
 def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reversed_item_dict, w_behavior, mc_order):
   pair_dict = dict()
   NB_ITEMS = len(item_dict)
-  for line in train_instances:
+  print("number items: ", NB_ITEMS)
+  for line in train_instances[:10]:
       elements = line.split("|")
       user = elements[0]
       basket_seq = elements[1:]
@@ -21,6 +22,7 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
         for ib_pair in prev_item_list:
             for item in cur_item_list:
                 t = (item_dict[ib_pair[0]], item_dict[item])
+                print(t)
                 if t not in pair_dict:
                     pair_dict[t] = w_behavior[ib_pair[1]]
                 else:
