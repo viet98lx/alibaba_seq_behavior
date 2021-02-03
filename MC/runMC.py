@@ -78,8 +78,8 @@ if __name__ == '__main__':
     nb_test = len(test_instances)
     print(nb_test)
 
-    split_train = int(0.4*nb_train)
-    split_test = int(0.4*nb_test)
+    split_train = int(0.2*nb_train)
+    split_test = int(0.2*nb_test)
 
     train_instances = train_instances[:split_train]
     test_instances = test_instances[:split_test]
