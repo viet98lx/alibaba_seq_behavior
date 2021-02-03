@@ -9,10 +9,10 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
   NB_ITEMS = len(item_dict)
   print("number items: ", NB_ITEMS)
   # j = 0
+  start = time.time()
   for line in train_instances:
       # print(j)
       # j += 1
-      start = time.time()
       elements = line.split("|")
       user = elements[0]
       # print('User')
@@ -40,17 +40,14 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
         #             pair_dict[t] += w_behavior[ib_pair[1]]
         for t in list(itertools.product(prev_ib_idx, cur_item_idx)):
             item_pair = (t[0][0], t[1])
-            # print(item_pair)
-            # print(t[0][1])
             if item_pair in pair_dict.keys():
                 pair_dict[item_pair] += w_behavior[t[0][1]]
             else:
                 pair_dict[item_pair] = w_behavior[t[0][1]]
-        # prev_item_idx = [item_dict[item] for item in prev_item_list]
-        # cur_item_idx = [item_dict[item] for item in cur_item_list]
-        end = time.time()
-        print("Time to run a seq line: ", end-start)
+  end = time.time()
+  print("Time to run all seq line: ", end-start)
 
+  start_1 = time.time()
   for key in pair_dict.keys():
     pair_dict[key] /= item_freq_dict[reversed_item_dict[key[0]]]
 
@@ -58,6 +55,8 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
   col = [p[1] for p in pair_dict]
   data = [pair_dict[p] for p in pair_dict]
   transition_matrix = sp.csr_matrix((data, (row, col)), shape=(NB_ITEMS, NB_ITEMS), dtype="float32")
+  end_1 = time.time()
+  print("Time to Create transition matrix: ", end_1-start_1)
   nb_nonzero = len(pair_dict)
   density = nb_nonzero * 1.0 / NB_ITEMS / NB_ITEMS
   print("Density of matrix: {:.6f}".format(density))
