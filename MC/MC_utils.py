@@ -7,7 +7,9 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
   pair_dict = dict()
   NB_ITEMS = len(item_dict)
   print("number items: ", NB_ITEMS)
+  i = 0
   for line in train_instances[:10]:
+      print(i++)
       elements = line.split("|")
       user = elements[0]
       basket_seq = elements[1:]
