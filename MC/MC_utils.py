@@ -22,18 +22,28 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
         prev_item_list = []
         for basket in prev_baskets:
             prev_item_list += [(p.split(':')) for p in re.split('[\\s]+', basket.strip())]
+        prev_ib_idx = [(item_dict[ib[0]], ib[1]) for ib in prev_item_list]
         cur_item_list = [p.split(':')[0] for p in re.split('[\\s]+', cur_basket.strip())]
-        for ib_pair in prev_item_list:
-            for item in cur_item_list:
-                t = (item_dict[ib_pair[0]], item_dict[item])
-                if len(t) == 0:
-                    print("empty")
-                else:
-                    print(t)
-                if t not in pair_dict:
-                    pair_dict[t] = w_behavior[ib_pair[1]]
-                else:
-                    pair_dict[t] += w_behavior[ib_pair[1]]
+        cur_item_idx = [item_dict[item] for item in cur_item_list]
+        # for ib_pair in prev_item_list:
+        #     for item in cur_item_list:
+        #         t = (item_dict[ib_pair[0]], item_dict[item])
+        #         if len(t) == 0:
+        #             print("empty")
+        #         else:
+        #             print(t)
+        #         if t not in pair_dict:
+        #             pair_dict[t] = w_behavior[ib_pair[1]]
+        #         else:
+        #             pair_dict[t] += w_behavior[ib_pair[1]]
+        for t in list(itertools.product(prev_ib_idx, cur_item_idx)):
+            item_pair = (t[0][0], t[1])
+            print(item_pair)
+            print(t[0][1])
+            if item_pair in pair_dict.keys():
+                pair_dict[item_pair] += w_behavior[t[0][1]]
+            else:
+                pair_dict[item_pair] = w_behavior[t[0][1]]
         # prev_item_idx = [item_dict[item] for item in prev_item_list]
         # cur_item_idx = [item_dict[item] for item in cur_item_list]
 
@@ -68,11 +78,11 @@ def build_knowledge(training_instances, w_behavior):
 
         for basket in basket_seq:
             ib_pair = [tuple(p.split(':')) for p in re.split('[\\s]+', basket.strip())]
-            print(ib_pair)
+            # print(ib_pair)
             for item_obs in ib_pair:
                 if item_obs[0] not in item_freq_dict:
-                    print(item_obs[0])
-                    print(item_obs[1])
+                    # print(item_obs[0])
+                    # print(item_obs[1])
                     item_freq_dict[item_obs[0]] = w_behavior[item_obs[1]]
                 else:
                     item_freq_dict[item_obs[0]] += w_behavior[item_obs[1]]
