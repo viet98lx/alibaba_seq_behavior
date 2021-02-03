@@ -2,6 +2,7 @@ import itertools
 import scipy.sparse as sp
 import re
 import numpy as np
+import time
 
 def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reversed_item_dict, w_behavior, mc_order):
   pair_dict = dict()
@@ -11,6 +12,7 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
   for line in train_instances:
       # print(j)
       # j += 1
+      start = time.time()
       elements = line.split("|")
       user = elements[0]
       # print('User')
@@ -46,7 +48,8 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
                 pair_dict[item_pair] = w_behavior[t[0][1]]
         # prev_item_idx = [item_dict[item] for item in prev_item_list]
         # cur_item_idx = [item_dict[item] for item in cur_item_list]
-
+        end = time.time()
+        print("Time to run a seq line: ", end-start)
 
   for key in pair_dict.keys():
     pair_dict[key] /= item_freq_dict[reversed_item_dict[key[0]]]
