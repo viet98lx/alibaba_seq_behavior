@@ -3,6 +3,7 @@ import argparse
 import scipy.sparse as sp
 import os
 import FMC_utils
+import json
 from sklearn.decomposition import non_negative_factorization
 
 if __name__ == '__main__':
@@ -12,6 +13,7 @@ if __name__ == '__main__':
     parser.add_argument('--output_dir', help='The directory of output', type=str, default='../saved_models/')
     parser.add_argument('--model_name', help='Model name ', type=str, default='fpmc')
     parser.add_argument('--n_factor', help='# of factor', type=int, default=4)
+    parser.add_argument('--w_behavior', help='Weight behavior file', type=str, default=None)
     parser.add_argument('--mc_order', help='Markov order', type=int, default=1)
     parser.add_argument('--max_iter', help='max iter of factorization', type=int, default=300)
     parser.add_argument('--transition_matrix_path', help='The directory of transition matrix', type=str, default=None)
@@ -24,6 +26,13 @@ if __name__ == '__main__':
     n_factor = args.n_factor
     mc_order = args.mc_order
     max_iter = args.max_iter
+    w_behavior_file = args.w_behavior
+
+    if w_behavior_file is None:
+        w_behavior = {'buy': 1, 'cart': 0.5, 'fav': 0.5, 'pv':0.5}
+    else:
+        with open(w_behavior_file, 'r') as fp:
+            w_behavior = json.load(fp)
 
     train_data_path = data_dir+'train_lines.txt'
     train_instances = FMC_utils.read_instances_lines_from_file(train_data_path)
@@ -35,10 +44,15 @@ if __name__ == '__main__':
     nb_test = len(test_instances)
     print(nb_test)
 
+    split_train = int(0.5 * nb_train)
+    # split_test = int(0.5*nb_test)
+
+    train_instances = train_instances[:split_train]
+
     ### build knowledge ###
     # common_instances = train_instances + test_instances
     print("---------------------@Build knowledge-------------------------------")
-    MAX_SEQ_LENGTH, item_dict, reversed_item_dict, item_probs, item_freq_dict, user_dict = FMC_utils.build_knowledge(train_instances+test_instances)
+    MAX_SEQ_LENGTH, item_dict, reversed_item_dict, item_probs, item_freq_dict, user_dict = FMC_utils.build_knowledge(train_instances+test_instances, w_behavior)
     if transition_matrix_path is None:
         transition_matrix = FMC_utils.calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reversed_item_dict)
         sp_matrix_path = model_name+'_transition_matrix_MC.npz'
