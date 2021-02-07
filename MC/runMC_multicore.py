@@ -119,12 +119,16 @@ if __name__ == '__main__':
     col = []
     data = []
     for pair_dict in transition_pair_dicts:
+        print('Number pair in core: ', len(pair_dict))
         row.extend([p[0] for p in pair_dict])
         col.extend([p[1] for p in pair_dict])
         data.extend([pair_dict[p] for p in pair_dict])
     NB_ITEMS = len(item_dict)
     transition_matrix = sp.csr_matrix((data, (row, col)), shape=(NB_ITEMS, NB_ITEMS), dtype="float32")
     # transition_matrix
+    nb_nonzero = transition_matrix.getnnz()
+    density = nb_nonzero * 1.0 / NB_ITEMS / NB_ITEMS
+    print("Density of matrix: {:.6f}".format(density))
     sp_matrix_path = model_name+'_transition_matrix_MC.npz'
     # nb_item = len(item_dict)
     # print('Density : %.6f' % (transition_matrix.nnz * 1.0 / nb_item / nb_item))
