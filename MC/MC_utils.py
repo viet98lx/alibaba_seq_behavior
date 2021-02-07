@@ -171,8 +171,9 @@ def write_predict(file_name, test_instances, topk, MC_model):
             f.write(' '+str(item))
         f.write('\n')
         f.write('predicted:')
-        for item in list_predict_item:
-            f.write(' '+str(item))
+        predict_len = len(list_predict_item)
+        for i in range(predict_len):
+            f.write(' '+str(list_predict_item[predict_len-1-i]))
         f.write('\n')
     f.close()
 
@@ -191,7 +192,7 @@ def read_predict(file_name):
 def hit_ratio(list_ground_truth_basket, list_predict_basket, topk):
     hit_count = 0
     for gt, predict in zip(list_ground_truth_basket, list_predict_basket):
-        num_correct = len(set(gt).intersection(predict[-topk:]))
+        num_correct = len(set(gt).intersection(predict[:topk]))
         if num_correct > 0:
             hit_count += 1
             # user_correct.add(user)
@@ -200,7 +201,7 @@ def hit_ratio(list_ground_truth_basket, list_predict_basket, topk):
 def recall(list_ground_truth_basket, list_predict_basket, topk):
     list_recall = []
     for gt, predict in zip(list_ground_truth_basket, list_predict_basket):
-        num_correct = len(set(gt).intersection(predict[-topk:]))
+        num_correct = len(set(gt).intersection(predict[:topk]))
         list_recall.append(num_correct / len(gt))
     return np.array(list_recall).mean()
 
