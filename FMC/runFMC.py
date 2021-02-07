@@ -74,9 +74,17 @@ if __name__ == '__main__':
     fmc_model.W = W
     fmc_model.H = H
     fmc_model.save(os.path.join(o_dir,model_name+'_W_H'))
+    topk = 50
+    print('Predict to outfile')
+    predict_file = os.path.join(o_dir, 'predict_' + model_name + '.txt')
+    FMC_utils.write_predict(predict_file, test_instances, topk, fmc_model)
+    print('Predict done')
+    ground_truth, predict = FMC_utils.read_predict(predict_file)
     for topk in [5, 10, 15]:
         print("Top : ", topk)
-        hit_rate = FMC_utils.FMC_hit_ratio(test_instances, topk, fmc_model)
-        recall = FMC_utils.FMC_recall(test_instances, topk, fmc_model)
+        # hit_rate = MC_hit_ratio(test_instances, topk, mc_model)
+        # recall = MC_recall(test_instances, topk, mc_model)
+        hit_rate = FMC_utils.hit_ratio(ground_truth, predict, topk)
+        recall = FMC_utils.recall(ground_truth, predict, topk)
         print("hit ratio: ", hit_rate)
         print("recall: ", recall)
