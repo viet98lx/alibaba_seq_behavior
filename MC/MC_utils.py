@@ -65,7 +65,8 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
 def multicore_calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reversed_item_dict, w_behavior, mc_order):
   pair_dict = dict()
   NB_ITEMS = len(item_dict)
-  print("number items: ", NB_ITEMS)
+  # print("number items: ", NB_ITEMS)
+  print('Number lines: ', len(train_instances))
   # j = 0
   start = time.time()
   for line in train_instances:
