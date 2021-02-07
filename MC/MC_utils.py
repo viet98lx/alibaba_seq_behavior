@@ -177,7 +177,7 @@ def write_predict(file_name, test_instances, topk, MC_model):
     f.close()
 
 def read_predict(file_name):
-    f = open(file_name, 'w')
+    f = open(file_name, 'r')
     lines = f.readlines()
     list_ground_truth_basket = []
     list_predict_basket = []
