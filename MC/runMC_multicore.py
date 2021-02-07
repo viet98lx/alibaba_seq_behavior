@@ -112,9 +112,9 @@ if __name__ == '__main__':
             sub_train = train_instances[i*sub_len:(i+1)*sub_len]
         arg = (sub_train, item_dict, item_freq_dict, reversed_item_dict, w_behavior, mc_order)
         arguments.append(arg)
-    results = pool.starmap(MC_utils.calculate_transition_matrix, arguments)
+    transition_pair_dicts = pool.starmap(MC_utils.multicore_calculate_transition_matrix, arguments)
 
-    transition_pair_dicts = MC_utils.multicore_calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reversed_item_dict, w_behavior, mc_order)
+    # transition_pair_dicts = MC_utils.multicore_calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reversed_item_dict, w_behavior, mc_order)
     row = []
     col = []
     data = []
