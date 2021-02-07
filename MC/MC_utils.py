@@ -166,7 +166,7 @@ def write_predict(file_name, test_instances, topk, MC_model):
         # item_list = re.split('[\\s]+', last_basket.strip())
         cur_item_list = [p.split(':')[0] for p in re.split('[\\s]+', last_basket.strip())]
         f.write(str(user)+'\n')
-        f.write('ground truth:')
+        f.write('ground_truth:')
         for item in cur_item_list:
             f.write(' '+str(item))
         f.write('\n')
