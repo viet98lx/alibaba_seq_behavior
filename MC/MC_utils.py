@@ -27,17 +27,6 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
         prev_ib_idx = [(item_dict[ib[0]], ib[1]) for ib in prev_item_list]
         cur_item_list = [p.split(':')[0] for p in re.split('[\\s]+', cur_basket.strip())]
         cur_item_idx = [item_dict[item] for item in cur_item_list]
-        # for ib_pair in prev_item_list:
-        #     for item in cur_item_list:
-        #         t = (item_dict[ib_pair[0]], item_dict[item])
-        #         if len(t) == 0:
-        #             print("empty")
-        #         else:
-        #             print(t)
-        #         if t not in pair_dict:
-        #             pair_dict[t] = w_behavior[ib_pair[1]]
-        #         else:
-        #             pair_dict[t] += w_behavior[ib_pair[1]]
         for t in list(itertools.product(prev_ib_idx, cur_item_idx)):
             item_pair = (t[0][0], t[1])
             if item_pair in pair_dict.keys():

@@ -44,10 +44,10 @@ if __name__ == '__main__':
     nb_test = len(test_instances)
     print(nb_test)
 
-    split_train = int(0.5 * nb_train)
+    # split_train = int(0.5 * nb_train)
     # split_test = int(0.5*nb_test)
 
-    train_instances = train_instances[:split_train]
+    # train_instances = train_instances[:split_train]
 
     ### build knowledge ###
     # common_instances = train_instances + test_instances
