@@ -63,6 +63,7 @@ if __name__ == '__main__':
     parser.add_argument('--model_name', help='Model name ', type=str, default='mc')
     parser.add_argument('--mc_order', help='Markov order', type=int, default=1)
     parser.add_argument('--w_behavior', help='Weight behavior file', type=str, default=None)
+    parser.add_argument('--toy_split', help='Ratio split', type=float, default=1)
     # parser.add_argument('--predict_file', help='predict result file', type=str, default=None)
     args = parser.parse_args()
 
@@ -71,6 +72,7 @@ if __name__ == '__main__':
     model_name = args.model_name
     mc_order = args.mc_order
     w_behavior_file = args.w_behavior
+    toy_ratio = args.toy_split
     # predict_file = args.predict_file
 
     train_data_path = data_dir+'train_lines.txt'
@@ -83,10 +85,10 @@ if __name__ == '__main__':
     nb_test = len(test_instances)
     print(nb_test)
 
-    # split_train = int(0.5*nb_train)
+    split_train = int(toy_ratio*nb_train)
     # split_test = int(0.5*nb_test)
 
-    # train_instances = train_instances[:split_train]
+    train_instances = train_instances[:split_train]
     # test_instances = test_instances[:split_test]
 
     if w_behavior_file is None:
