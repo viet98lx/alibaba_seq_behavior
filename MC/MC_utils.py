@@ -17,10 +17,9 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
       user = elements[0]
       # print('User')
       basket_seq = elements[1:]
-      # st = mc_order
-      # if len(basket_seq) < mc_order+1:
-      #     st = 1
-      st = 1
+      st = mc_order
+      if len(basket_seq) < mc_order+1:
+          st = 1
       for i in range(st,len(basket_seq)):
         prev_baskets = basket_seq[i-st:i]
         cur_basket = basket_seq[i]
@@ -157,7 +156,7 @@ def write_predict(file_name, test_instances, topk, MC_model):
         # prev_basket = basket_seq[-2]
         prev_item_list = []
         for basket in basket_seq:
-            prev_item_list.append([p.split(':')[0] for p in re.split('[\\s]+', basket.strip())])
+            prev_item_list += [p.split(':')[0] for p in re.split('[\\s]+', basket.strip())]
         list_predict_item = MC_model.top_predicted_item(prev_item_list, topk)
         # item_list = re.split('[\\s]+', last_basket.strip())
         cur_item_list = [p.split(':')[0] for p in re.split('[\\s]+', last_basket.strip())]
