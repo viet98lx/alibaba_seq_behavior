@@ -15,17 +15,17 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
       user = elements[0]
       # print('User')
       basket_seq = elements[1:]
-      prev_baskets = basket_seq[0:-1]
+      prev_baskets = basket_seq[:-1]
       cur_basket = basket_seq[-1]
       # prev_item_list = re.split('[\\s]+', prev_basket.strip())
       prev_item_list = []
       for basket in prev_baskets:
           prev_item_list += [(p.split(':')) for p in re.split('[\\s]+', basket.strip())]
-      prev_ib_idx = [(item_dict[ib[0]], ib[1]) for ib in prev_item_list]
+      prev_ib_idx = [item_dict[ib[0]] for ib in prev_item_list]
       cur_item_list = [p.split(':')[0] for p in re.split('[\\s]+', cur_basket.strip())]
       cur_item_idx = [item_dict[item] for item in cur_item_list]
       for t in list(itertools.product(prev_ib_idx, cur_item_idx)):
-          item_pair = (t[0][0], t[1])
+          item_pair = (t[0], t[1])
           if item_pair in pair_dict.keys():
               pair_dict[item_pair] += 1
           else:
