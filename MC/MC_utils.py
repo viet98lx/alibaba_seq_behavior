@@ -17,25 +17,25 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
       user = elements[0]
       # print('User')
       basket_seq = elements[1:]
-      st = 1
+      # st = 1
       # if len(basket_seq) < mc_order+1:
       #   st = 1
-      for i in range(st,len(basket_seq)):
-        prev_baskets = basket_seq[i-st:i]
-        cur_basket = basket_seq[i]
-        # prev_item_list = re.split('[\\s]+', prev_basket.strip())
-        prev_item_list = []
-        for basket in prev_baskets:
-            prev_item_list += [(p.split(':')) for p in re.split('[\\s]+', basket.strip())]
-        prev_ib_idx = [(item_dict[ib[0]], ib[1]) for ib in prev_item_list]
-        cur_item_list = [p.split(':')[0] for p in re.split('[\\s]+', cur_basket.strip())]
-        cur_item_idx = [item_dict[item] for item in cur_item_list]
-        for t in list(itertools.product(prev_ib_idx, cur_item_idx)):
-            item_pair = (t[0][0], t[1])
-            if item_pair in pair_dict.keys():
-                pair_dict[item_pair] += w_behavior[t[0][1]]
-            else:
-                pair_dict[item_pair] = w_behavior[t[0][1]]
+      # for i in range(st,len(basket_seq)):
+      prev_baskets = basket_seq[:-1]
+      cur_basket = basket_seq[-1]
+      # prev_item_list = re.split('[\\s]+', prev_basket.strip())
+      prev_item_list = []
+      for basket in prev_baskets:
+          prev_item_list += [(p.split(':')) for p in re.split('[\\s]+', basket.strip())]
+          prev_ib_idx = [(item_dict[ib[0]], ib[1]) for ib in prev_item_list]
+          cur_item_list = [p.split(':')[0] for p in re.split('[\\s]+', cur_basket.strip())]
+          cur_item_idx = [item_dict[item] for item in cur_item_list]
+          for t in list(itertools.product(prev_ib_idx, cur_item_idx)):
+              item_pair = (t[0][0], t[1])
+              if item_pair in pair_dict.keys():
+                  pair_dict[item_pair] += w_behavior[t[0][1]]
+              else:
+                  pair_dict[item_pair] = w_behavior[t[0][1]]
   end = time.time()
   print("Time to run all seq line: ", end-start)
 
@@ -53,6 +53,8 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
   density = nb_nonzero * 1.0 / NB_ITEMS / NB_ITEMS
   print("Density of matrix: {:.6f}".format(density))
   return transition_matrix
+
+
 
 def multicore_calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reversed_item_dict, w_behavior, mc_order):
   pair_dict = dict()
@@ -148,22 +150,23 @@ def write_predict(file_name, test_instances, topk, MC_model):
     for line in test_instances:
         elements = line.split("|")
         user = elements[0]
-        if len(elements[1:]) < MC_model.mc_order+1:
-            basket_seq = elements[1:-1]
-        else:
-            basket_seq = elements[-MC_model.mc_order-1:-1]
+        basket_seq = elements[1:]
+        # if len(elements[1:]) < MC_model.mc_order+1:
+        #     basket_seq = elements[1:-1]
+        # else:
+        #     basket_seq = elements[-MC_model.mc_order-1:-1]
         last_basket = basket_seq[-1]
-        # prev_basket = basket_seq[-2]
-        if MC_model.mc_order == 1:
-            prev_item_list = []
-            for basket in basket_seq:
-                prev_item_list += [p.split(':')[0] for p in re.split('[\\s]+', basket.strip())]
-            list_predict_item = MC_model.top_predicted_item(prev_item_list, topk)
-        else :
-            prev_item_list = []
-            for basket in basket_seq:
-                prev_item_list.append([p.split(':')[0] for p in re.split('[\\s]+', basket.strip())])
-            list_predict_item = MC_model.top_predicted_mc_order(prev_item_list, topk)
+        prev_basket = basket_seq[:-1]
+        # if MC_model.mc_order == 1:
+        prev_item_list = []
+        for basket in prev_basket:
+            prev_item_list += [p.split(':')[0] for p in re.split('[\\s]+', basket.strip())]
+        list_predict_item = MC_model.top_predicted_item(prev_item_list, topk)
+        # else :
+        #     prev_item_list = []
+        #     for basket in basket_seq:
+        #         prev_item_list.append([p.split(':')[0] for p in re.split('[\\s]+', basket.strip())])
+        #     list_predict_item = MC_model.top_predicted_mc_order(prev_item_list, topk)
         # item_list = re.split('[\\s]+', last_basket.strip())
         cur_item_list = [p.split(':')[0] for p in re.split('[\\s]+', last_basket.strip())]
         f.write(str(user)+'\n')
