@@ -11,31 +11,25 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
   # j = 0
   start = time.time()
   for line in train_instances:
-      # print(j)
-      # j += 1
       elements = line.split("|")
       user = elements[0]
       # print('User')
       basket_seq = elements[1:]
-      # st = 1
-      # if len(basket_seq) < mc_order+1:
-      #   st = 1
-      # for i in range(st,len(basket_seq)):
       prev_baskets = basket_seq[:-1]
       cur_basket = basket_seq[-1]
       # prev_item_list = re.split('[\\s]+', prev_basket.strip())
       prev_item_list = []
       for basket in prev_baskets:
           prev_item_list += [(p.split(':')) for p in re.split('[\\s]+', basket.strip())]
-          prev_ib_idx = [(item_dict[ib[0]], ib[1]) for ib in prev_item_list]
-          cur_item_list = [p.split(':')[0] for p in re.split('[\\s]+', cur_basket.strip())]
-          cur_item_idx = [item_dict[item] for item in cur_item_list]
-          for t in list(itertools.product(prev_ib_idx, cur_item_idx)):
-              item_pair = (t[0][0], t[1])
-              if item_pair in pair_dict.keys():
-                  pair_dict[item_pair] += w_behavior[t[0][1]]
-              else:
-                  pair_dict[item_pair] = w_behavior[t[0][1]]
+      prev_ib_idx = [(item_dict[ib[0]], ib[1]) for ib in prev_item_list]
+      cur_item_list = [p.split(':')[0] for p in re.split('[\\s]+', cur_basket.strip())]
+      cur_item_idx = [item_dict[item] for item in cur_item_list]
+      for t in list(itertools.product(prev_ib_idx, cur_item_idx)):
+          item_pair = (t[0][0], t[1])
+          if item_pair in pair_dict.keys():
+              pair_dict[item_pair] += w_behavior[t[0][1]]
+          else:
+              pair_dict[item_pair] = w_behavior[t[0][1]]
   end = time.time()
   print("Time to run all seq line: ", end-start)
 
