@@ -15,7 +15,7 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
       user = elements[0]
       # print('User')
       basket_seq = elements[1:]
-      prev_baskets = basket_seq[:-1]
+      prev_baskets = basket_seq[0:-1]
       cur_basket = basket_seq[-1]
       # prev_item_list = re.split('[\\s]+', prev_basket.strip())
       prev_item_list = []
@@ -27,9 +27,9 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
       for t in list(itertools.product(prev_ib_idx, cur_item_idx)):
           item_pair = (t[0][0], t[1])
           if item_pair in pair_dict.keys():
-              pair_dict[item_pair] += w_behavior[t[0][1]]
+              pair_dict[item_pair] += 1
           else:
-              pair_dict[item_pair] = w_behavior[t[0][1]]
+              pair_dict[item_pair] = 1
   end = time.time()
   print("Time to run all seq line: ", end-start)
 
@@ -77,9 +77,9 @@ def multicore_calculate_transition_matrix(train_instances, item_dict, item_freq_
         for t in list(itertools.product(prev_ib_idx, cur_item_idx)):
             item_pair = (t[0][0], t[1])
             if item_pair in pair_dict.keys():
-                pair_dict[item_pair] += w_behavior[t[0][1]]
+                pair_dict[item_pair] += 1
             else:
-                pair_dict[item_pair] = w_behavior[t[0][1]]
+                pair_dict[item_pair] = 1
   end = time.time()
   print("Time to run all seq line: ", end-start)
 
@@ -122,9 +122,9 @@ def build_knowledge(training_instances, w_behavior):
                 if item_obs[0] not in item_freq_dict:
                     # print(item_obs[0])
                     # print(item_obs[1])
-                    item_freq_dict[item_obs[0]] = w_behavior[item_obs[1]]
+                    item_freq_dict[item_obs[0]] = 1
                 else:
-                    item_freq_dict[item_obs[0]] += w_behavior[item_obs[1]]
+                    item_freq_dict[item_obs[0]] += 1
 
     items = sorted(list(item_freq_dict.keys()))
     item_dict = dict()
@@ -156,12 +156,6 @@ def write_predict(file_name, test_instances, topk, MC_model):
         for basket in prev_basket:
             prev_item_list += [p.split(':')[0] for p in re.split('[\\s]+', basket.strip())]
         list_predict_item = MC_model.top_predicted_item(prev_item_list, topk)
-        # else :
-        #     prev_item_list = []
-        #     for basket in basket_seq:
-        #         prev_item_list.append([p.split(':')[0] for p in re.split('[\\s]+', basket.strip())])
-        #     list_predict_item = MC_model.top_predicted_mc_order(prev_item_list, topk)
-        # item_list = re.split('[\\s]+', last_basket.strip())
         cur_item_list = [p.split(':')[0] for p in re.split('[\\s]+', last_basket.strip())]
         f.write(str(user)+'\n')
         f.write('ground_truth:')
