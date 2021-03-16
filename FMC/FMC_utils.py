@@ -52,7 +52,7 @@ def calculate_transition_matrix(train_instances, item_dict, item_freq_dict, reve
 
   return list_trans_matrix
 
-def build_knowledge(training_instances, w_behavior):
+def build_knowledge(training_instances):
     MAX_SEQ_LENGTH = 0
     item_freq_dict = {}
     user_dict = dict()
@@ -75,9 +75,9 @@ def build_knowledge(training_instances, w_behavior):
                 if item_obs[0] not in item_freq_dict:
                     # print(item_obs[0])
                     # print(item_obs[1])
-                    item_freq_dict[item_obs[0]] = w_behavior[item_obs[1]]
+                    item_freq_dict[item_obs[0]] = 1
                 else:
-                    item_freq_dict[item_obs[0]] += w_behavior[item_obs[1]]
+                    item_freq_dict[item_obs[0]] += 1
 
     items = sorted(list(item_freq_dict.keys()))
     item_dict = dict()
