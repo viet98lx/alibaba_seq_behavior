@@ -23,7 +23,7 @@ if __name__ == '__main__':
     nb_predict = args.nb_predict
     load_file = args.load_file
     topk = args.topk
-    ex_file = args.example_file
+    # ex_file = args.example_file
     n_factor = args.n_factor
     mc_order = args.mc_order
 
