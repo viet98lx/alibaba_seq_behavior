@@ -14,7 +14,7 @@ if __name__ == '__main__':
     parser.add_argument('--topk', help='# of predict', type=int, default=10)
     parser.add_argument('--n_factor', help='# of factor', type=int, default=4)
     parser.add_argument('--mc_order', help='Markov order', type=int, default=1)
-    parser.add_argument('--example_file', help='Example_file', type=str, default=None)
+    # parser.add_argument('--example_file', help='Example_file', type=str, default=None)
     args = parser.parse_args()
 
     f_dir = args.input_dir
