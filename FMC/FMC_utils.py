@@ -92,7 +92,7 @@ def build_knowledge(training_instances, w_behavior):
     reversed_item_dict = dict(zip(item_dict.values(), item_dict.keys()))
     return MAX_SEQ_LENGTH, item_dict, reversed_item_dict, item_probs, item_freq_dict, user_dict
 
-def write_predict(file_name, test_instances, topk, MC_model):
+def write_predict(file_name, test_instances, topk, FMC_model):
     f = open(file_name, 'w')
     for line in test_instances:
         elements = line.split("|")
@@ -102,8 +102,8 @@ def write_predict(file_name, test_instances, topk, MC_model):
         # prev_basket = basket_seq[-2]
         prev_item_list = []
         for basket in basket_seq:
-            prev_item_list.append([p.split(':')[0] for p in re.split('[\\s]+', basket.strip())])
-        list_predict_item = MC_model.top_predicted_mc_order(prev_item_list, topk)
+            prev_item_list += [p.split(':')[0] for p in re.split('[\\s]+', basket.strip())]
+        list_predict_item = FMC_model.top_predicted_item(prev_item_list, topk)
         # item_list = re.split('[\\s]+', last_basket.strip())
         cur_item_list = [p.split(':')[0] for p in re.split('[\\s]+', last_basket.strip())]
         f.write(str(user)+'\n')

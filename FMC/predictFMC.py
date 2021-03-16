@@ -48,24 +48,22 @@ if __name__ == '__main__':
     fmc_model = FMC(item_dict, reversed_item_dict, item_freq_dict, n_factor, mc_order)
     fmc_model.load(load_file)
 
-    if ex_file is not None:
-        ex_instances = FMC_utils.read_instances_lines_from_file(ex_file)
-    else :
-        ex_instances = test_instances
+    # if ex_file is not None:
+    #     ex_instances = FMC_utils.read_instances_lines_from_file(ex_file)
+    # else :
+    #     ex_instances = test_instances
+    topk = 50
+    print('Predict to outfile')
+    predict_file = os.path.join(o_dir, 'predict_' + model_name + '.txt')
+    FMC_utils.write_predict(predict_file, test_instances, topk, fmc_model)
+    print('Predict done')
+    ground_truth, predict = FMC_utils.read_predict(predict_file)
+    for topk in [5, 10, 15, 20]:
+        print("Top : ", topk)
+        # hit_rate = MC_hit_ratio(test_instances, topk, mc_model)
+        # recall = MC_recall(test_instances, topk, mc_model)
+        hit_rate = FMC_utils.hit_ratio(ground_truth, predict, topk)
+        recall = FMC_utils.recall(ground_truth, predict, topk)
+        print("hit ratio: ", hit_rate)
+        print("recall: ", recall)
 
-    for i in random.sample(ex_instances, nb_predict):
-        elements = i.split('|')
-        b_seq = elements[-fmc_model.mc_order - 1:-1]
-        # prev_basket = [item for item in re.split('[\\s]+',b_seq[-2].strip())]
-        prev_item = []
-        for prev_basket in b_seq[:-1]:
-            prev_item += [p.split(':')[0] for p in re.split('[\\s]+', prev_basket.strip())]
-        target_basket = [p.split(':')[0] for p in re.split('[\\s]+', b_seq[-1].strip())]
-        topk_item = fmc_model.top_predicted_item(prev_item, topk)
-        correct_set = set(topk_item).intersection(set(target_basket))
-        print("Input basket: ", prev_item)
-        print("Ground truth: ", target_basket)
-        print("Nb_correct: ", len(correct_set))
-        print("Predict topk: ", topk_item)
-        print("Items correct: ", list(correct_set))
-        print()
