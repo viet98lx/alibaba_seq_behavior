@@ -37,7 +37,6 @@ if __name__ == '__main__':
     test_instances = FMC_utils.read_instances_lines_from_file(test_data_path)
     nb_test = len(test_instances)
     # print(nb_test)
-    w_be
     print("---------------------@Build knowledge-------------------------------")
     MAX_SEQ_LENGTH, item_dict, reversed_item_dict, item_probs, item_freq_dict, user_dict = FMC_utils.build_knowledge(train_instances+test_instances)
 
